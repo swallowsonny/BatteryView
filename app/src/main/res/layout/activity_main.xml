@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/tv_power"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bv"
+        android:layout_marginBottom="5dp"/>
+
+    <com.sjx.batteryviewlibrary.BatteryView
+        android:id="@+id/bv"
+        android:layout_width="35dp"
+        android:layout_height="15dp"
+        app:bv_orientation="horizontal_right"
+        app:bv_border_color="@color/white"
+        app:bv_power_color_low="@color/low"
+        app:bv_power_color_medium="@color/medium"
+        app:bv_power_color_high="@color/high"
+        app:bv_border_padding="1.5dp"
+        app:bv_border_width="1dp"
+        app:bv_header_width="1dp"
+        app:bv_radis="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

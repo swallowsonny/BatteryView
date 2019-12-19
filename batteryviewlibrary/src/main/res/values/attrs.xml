@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BatteryView">
+
+        <!-- 电池边方向-->
+        <attr name="bv_orientation">
+            <enum name="horizontal_left" value="0" />
+            <enum name="horizontal_right" value="1" />
+            <enum name="vertical_top" value="2" />
+            <enum name="vertical_bottom" value="3" />
+        </attr>
+
+        <!-- 电池外边框 -->
+        <!-- 电池边框与内部电量的间隔 -->
+        <attr name="bv_border_padding" format="dimension|reference" />
+        <!-- 电池边框宽度 -->
+        <attr name="bv_border_width" format="dimension|reference" />
+        <!-- 电池边框圆角 -->
+        <attr name="bv_radis" format="dimension|reference" />
+        <!-- 电池边框颜色 -->
+        <attr name="bv_border_color" format="color|reference" />
+
+        <!-- 电池实心电量 -->
+        <!-- 电池电量及对应的颜色 -->
+        <attr name="bv_power_color_low" format="color|reference" />
+        <attr name="bv_power_value_low" format="integer" />
+        <attr name="bv_power_color_medium" format="color|reference" />
+        <attr name="bv_power_value_medium" format="integer" />
+        <attr name="bv_power_color_high" format="color|reference" />
+        <!-- 电池头的宽度 -->
+        <attr name="bv_header_width" format="dimension|reference" />
+    </declare-styleable>
+
+
+</resources>
