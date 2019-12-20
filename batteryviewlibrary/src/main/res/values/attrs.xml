@@ -34,7 +34,7 @@
         <attr name="bv_header_width" format="dimension|reference" />
         <attr name="bv_header_color" format="color|reference"/>
 
-        <!-- 充电动画速度 0-100 -->
+        <!-- 充电动画速度 1-9 -->
         <attr name="bv_charging_speed" format="integer"/>
     </declare-styleable>
 
