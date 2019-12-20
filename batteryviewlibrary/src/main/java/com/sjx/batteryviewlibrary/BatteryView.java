@@ -46,7 +46,13 @@ public class BatteryView extends View implements LifecycleObserver {
     private int mediumValue;
     // 高电量 默认值 21%-100% 白色
     private int highColor;
+    private int headerColor;
     private int currentPower = 60; // 当前电量
+
+    // 未充电时高电量颜色
+    private int noChargingHighColor;
+
+    private int chargingSpeed;
 
     private int width;
     private int height;
@@ -118,11 +124,18 @@ public class BatteryView extends View implements LifecycleObserver {
         borderColor = ta.getColor(R.styleable.BatteryView_bv_border_color, Color.WHITE);
 
         // 电池实心部分
-        lowColor = ta.getColor(R.styleable.BatteryView_bv_power_color_low, Color.RED);
+        lowColor = ta.getColor(R.styleable.BatteryView_bv_power_color_low, mContext.getResources().getColor(R.color.low));
         lowValue = ta.getInt(R.styleable.BatteryView_bv_power_value_low, 10);
-        mediumColor = ta.getColor(R.styleable.BatteryView_bv_power_color_medium, Color.YELLOW);
+        mediumColor = ta.getColor(R.styleable.BatteryView_bv_power_color_medium, mContext.getResources().getColor(R.color.medium));
         mediumValue = ta.getInt(R.styleable.BatteryView_bv_power_value_medium, 20);
-        highColor = ta.getColor(R.styleable.BatteryView_bv_power_color_high, Color.GREEN);
+        highColor = ta.getColor(R.styleable.BatteryView_bv_power_color_high, mContext.getResources().getColor(R.color.high));
+
+        headerColor = ta.getColor(R.styleable.BatteryView_bv_header_color, Color.WHITE);
+
+        noChargingHighColor = ta.getColor(R.styleable.BatteryView_bv_no_charging_color_high, mContext.getResources().getColor(R.color.high));
+
+        chargingSpeed = ta.getInt(R.styleable.BatteryView_bv_charging_speed, 2) % 10;
+        if(chargingSpeed == 0) chargingSpeed = 1;
         ta.recycle();
     }
 
@@ -148,7 +161,7 @@ public class BatteryView extends View implements LifecycleObserver {
         headerPaint = new Paint();
         headerPaint.setAntiAlias(true);
         headerPaint.setStyle(Paint.Style.FILL);
-        headerPaint.setColor(borderColor);
+        headerPaint.setColor(headerColor);
         headerPaint.setStrokeWidth(0);
     }
 
@@ -170,16 +183,17 @@ public class BatteryView extends View implements LifecycleObserver {
         }else if(orientation == BatteryViewOrientation.HORIZONTAL_RIGHT){
             drawHorizontalRight(canvas);
         }else if (orientation == BatteryViewOrientation.VERTICAL_TOP){
-
+            drawVerticalTop(canvas);
         }else if (orientation == BatteryViewOrientation.VERTICAL_BOTTOM){
-
+            drawVerticalBottom(canvas);
         }
     }
+
     // 朝左的电池
     private void drawHorizontalLeft(Canvas canvas) {
         // 绘制边框
         if (borderRf == null) {
-            borderRf = new RectF(borderWidth, borderWidth, width - borderWidth - borderPadding - headerWidth, height - borderWidth);
+            borderRf = new RectF(headerWidth+borderPadding+borderWidth, borderWidth, width - borderWidth, height - borderWidth);
         }
         canvas.drawRoundRect(borderRf, radis, radis, borderPaint);
         // 绘制实心区域
@@ -192,7 +206,7 @@ public class BatteryView extends View implements LifecycleObserver {
         // 绘制电池头
         if (headerRf == null) {
             float headerHeight = height / 3f;
-            headerRf = new RectF(width - headerWidth - borderPadding, headerHeight, width, headerHeight * 2);
+            headerRf = new RectF(0, headerHeight, headerWidth, headerHeight * 2);
         }
         canvas.drawRoundRect(headerRf, radis, radis, headerPaint);
     }
@@ -213,7 +227,7 @@ public class BatteryView extends View implements LifecycleObserver {
         // 绘制电池头
         if (headerRf == null) {
             float headerHeight = height / 3f;
-            headerRf = new RectF(width - headerWidth - borderPadding, headerHeight, width, headerHeight * 2);
+            headerRf = new RectF(width - headerWidth, headerHeight, width, headerHeight * 2);
         }
         canvas.drawRoundRect(headerRf, radis, radis, headerPaint);
     }
@@ -224,26 +238,88 @@ public class BatteryView extends View implements LifecycleObserver {
         return fullWidth * power / 100f;
     }
 
-    public void setPower(int power) {
-        if(mOnBatteryPowerListener != null) mOnBatteryPowerListener.onPower(power);
-
-        if(orientation == BatteryViewOrientation.HORIZONTAL_RIGHT){
-            setHorizontalRightPower(power);
+    // 电池头朝上
+    private void drawVerticalTop(Canvas canvas) {
+        // 绘制边框
+        if (borderRf == null) {
+            borderRf = new RectF(borderWidth, headerWidth + borderPadding + borderWidth, width - borderWidth, height - borderWidth);
         }
+        canvas.drawRoundRect(borderRf, radis, radis, borderPaint);
+        // 绘制实心区域
+        if (powerRf == null) {
+            initBattery();
+            setPower(currentPower);
+        }
+        canvas.drawRoundRect(powerRf, radis, radis, powerPaint);
+
+        // 绘制电池头
+        if (headerRf == null) {
+            float headerWidth1 = width / 3f;
+            headerRf = new RectF(headerWidth1, 0, headerWidth1 * 2, headerWidth);
+        }
+        canvas.drawRoundRect(headerRf, radis, radis, headerPaint);
     }
 
-    private void setHorizontalRightPower(int power){
-        currentPower = power;
+    // 电池头朝下
+    private void drawVerticalBottom(Canvas canvas) {
+        // 绘制边框
+        if (borderRf == null) {
+            borderRf = new RectF(borderWidth, borderWidth, width - borderWidth, height - headerWidth - borderPadding - borderWidth);
+        }
+        canvas.drawRoundRect(borderRf, radis, radis, borderPaint);
+        // 绘制实心区域
+        if (powerRf == null) {
+            initBattery();
+            setPower(currentPower);
+        }
+        canvas.drawRoundRect(powerRf, radis, radis, powerPaint);
+
+        // 绘制电池头
+        if (headerRf == null) {
+            float headerWidth1 = width / 3f;
+            headerRf = new RectF(headerWidth1, height - headerWidth, headerWidth1 * 2, height);
+        }
+        canvas.drawRoundRect(headerRf, radis, radis, headerPaint);
+    }
+
+    private float getVerticalHeight(int power){
+        // 满电量宽度
+        float fullHeight = height - borderWidth * 2 - borderPadding * 3 - headerWidth;
+        return fullHeight * power / 100f;
+    }
+
+    public void setPower(int power) {
+        if(mOnBatteryPowerListener != null) mOnBatteryPowerListener.onPower(currentPower);
+
         if (power <= lowValue) {
             powerPaint.setColor(lowColor);
         } else if (power < mediumValue) {
             powerPaint.setColor(mediumColor);
         } else {
-            powerPaint.setColor(highColor);
+            if(runnable == null){
+                powerPaint.setColor(noChargingHighColor);
+            }else{
+                powerPaint.setColor(highColor);
+            }
         }
-        float realWidth = getHorizontalWidth(power);
-        powerRf = new RectF(borderWidth + borderPadding, borderWidth + borderPadding, borderWidth + borderPadding + realWidth, height - borderWidth - borderPadding);
-        postInvalidate();
+
+        if(orientation == BatteryViewOrientation.HORIZONTAL_RIGHT){
+            float realWidth = getHorizontalWidth(power);
+            powerRf = new RectF(borderWidth + borderPadding, borderWidth + borderPadding, borderWidth + borderPadding + realWidth, height - borderWidth - borderPadding);
+            postInvalidate();
+        }else if(orientation == BatteryViewOrientation.HORIZONTAL_LEFT){
+            float realWidth = getHorizontalWidth(power);
+            powerRf = new RectF(width-borderWidth-borderPadding-realWidth, borderWidth + borderPadding, width - borderWidth - borderPadding, height - borderWidth - borderPadding);
+            postInvalidate();
+        } else if(orientation == BatteryViewOrientation.VERTICAL_TOP){
+            float realHeight = getVerticalHeight(power);
+            powerRf = new RectF(borderWidth + borderPadding, height - borderWidth - borderPadding - realHeight, width - borderWidth - borderPadding, height - borderWidth - borderPadding);
+            postInvalidate();
+        }else if(orientation == BatteryViewOrientation.VERTICAL_BOTTOM){
+            float realHeight = getVerticalHeight(power);
+            powerRf = new RectF(borderWidth + borderPadding, borderWidth + borderPadding, width - borderWidth - borderPadding, borderWidth + borderPadding + realHeight);
+            postInvalidate();
+        }
     }
 
 
@@ -280,6 +356,7 @@ public class BatteryView extends View implements LifecycleObserver {
                 stopCharge();
             }
 
+            currentPower = power;
             if (powerRf != null && runnable == null) {
                 setPower(power);
             }
@@ -302,7 +379,7 @@ public class BatteryView extends View implements LifecycleObserver {
             public void run() {
                 power %= 100;
                 setPower(power);
-                power += 2;
+                power += chargingSpeed;
                 //延迟执行
                 mHandler.postDelayed(this, 200);
             }
@@ -333,6 +410,14 @@ public class BatteryView extends View implements LifecycleObserver {
     }
     public void removeOnBatteryPowerListener(){
         mOnBatteryPowerListener = null;
+    }
+
+    /**
+     * 充电动画速度
+     * @param speed 1-9之前的数值
+     */
+    public void setChargingSpeed(int speed){
+        this.chargingSpeed = speed;
     }
 
 }

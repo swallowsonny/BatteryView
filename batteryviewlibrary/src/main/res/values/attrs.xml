@@ -27,8 +27,15 @@
         <attr name="bv_power_color_medium" format="color|reference" />
         <attr name="bv_power_value_medium" format="integer" />
         <attr name="bv_power_color_high" format="color|reference" />
+
+
+        <attr name="bv_no_charging_color_high" format="color|reference" />
         <!-- 电池头的宽度 -->
         <attr name="bv_header_width" format="dimension|reference" />
+        <attr name="bv_header_color" format="color|reference"/>
+
+        <!-- 充电动画速度 0-100 -->
+        <attr name="bv_charging_speed" format="integer"/>
     </declare-styleable>
 
 

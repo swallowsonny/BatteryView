@@ -6,7 +6,7 @@
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
 
-    <color name="low">#CC0000</color>
-    <color name="medium">#FFCC00</color>
-    <color name="high">#00CC00</color>
+    <color name="low1">#FF0000</color>
+    <color name="medium1">#00FF00</color>
+    <color name="high1">#FFFFFF</color>
 </resources>
