@@ -5,7 +5,7 @@
 [ ![Download](https://api.bintray.com/packages/swallowsonny/ext/BatteryView/images/download.svg?version=1.0.0) ](https://bintray.com/swallowsonny/ext/BatteryView/1.0.0/link)
 
 #### 成果图片
-![Image](https://github.com/swallowsonny/BatteryView/tree/master/imgs/battery.jpg)
+![Image](https://github.com/swallowsonny/BatteryView/blob/master/imgs/battery.jpg)
 
 
 
