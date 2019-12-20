@@ -5,7 +5,7 @@
 [ ![Download](https://api.bintray.com/packages/swallowsonny/ext/BatteryView/images/download.svg?version=1.0.0) ](https://bintray.com/swallowsonny/ext/BatteryView/1.0.0/link)
 
 #### 成果图片
-![Image](https://github.com/swallowsonny/BatteryView/blob/master/imgs/battery.jpg)
+![Image](https://github.com/swallowsonny/BatteryView/blob/master/imgs/battery.png)
 
 
 
@@ -27,7 +27,7 @@ implementation 'com.sjx.batteryview:BatteryView:1.0.0'
 - xml中引入
 ```xml
 <com.sjx.batteryviewlibrary.BatteryView
-        android:id="@+id/bv_1"
+        android:id="@+id/batteryView"
         android:layout_width="32dp"
         android:layout_height="14dp"
         app:bv_orientation="horizontal_left"
