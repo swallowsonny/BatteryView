@@ -14,7 +14,7 @@
 ```
 repositories {
 	maven {
-		url  "https://dl.bintray.comswallowsonny/ext"
+		url  "https://dl.bintray.com/swallowsonny/ext"
 	}
 }
 ```
